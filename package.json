@@ -1,18 +1,28 @@
 {
   "name": "vue-list-picker",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "storybook:build": "vue-cli-service storybook:build -c config/storybook",
+    "storybook": "vue-cli-service storybook:serve -p 6006 -c config/storybook",
+    "test:unit": "vue-cli-service test:unit",
+    "test:watch": "vue-cli-service test:unit --watch",
+    "commit": "git-cz",
+    "commit:retry": "git-cz --retry",
+    "commitmsg": "commitlint -e"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
     "vue": "^2.6.10"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "@storybook/addon-actions": "^5.1.9",
+    "@storybook/addon-backgrounds": "^5.1.9",
+    "@storybook/addon-knobs": "^5.1.9",
+    "@storybook/addon-links": "^5.1.9",
+    "@storybook/addon-notes": "^5.1.9",
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-plugin-eslint": "^3.9.0",
     "@vue/cli-plugin-unit-jest": "^3.9.0",
@@ -22,9 +32,58 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
+    "commitizen": "^3.1.1",
+    "core-js": "2.6.5",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "husky": "^3.0.0",
+    "vue-cli-plugin-storybook": "^0.6.1",
     "vue-template-compiler": "^2.6.10"
+  },
+  "bugs": {
+    "url": "https://github.com/guastallaigor/vue-list-picker/issues"
+  },
+  "files": [
+    "src/*",
+    "*.json",
+    "*.js"
+  ],
+  "keywords": [
+    "vue",
+    "vuejs",
+    "list-picker",
+    "list",
+    "picker",
+    "vue-component",
+    "vue-list-picker"
+  ],
+  "license": "MIT",
+  "main": "./vue-list-picker.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:guastallaigor/vue-list-picker.git"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "subject-case": [
+        0,
+        "never",
+        "sentence-case"
+      ],
+      "subject-full-stop": [
+        0,
+        "never",
+        "."
+      ]
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "eslintConfig": {
     "root": true,
@@ -73,6 +132,8 @@
     "testMatch": [
       "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
     ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "testURL": "http://localhost/",
     "watchPlugins": [
       "jest-watch-typeahead/filename",
