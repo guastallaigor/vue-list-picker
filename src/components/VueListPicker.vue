@@ -1,17 +1,19 @@
 <template>
   <div class="vue-list-picker">
     <div class="list-picker-container list-picker-left">
-      <div class="list-picker-title">{{ titleLeft }}</div>
-      <div class="list-picker-panel" ref="moverleft">
+      <div class="list-picker-title" :class="getTitleClasses">
+        {{ titleLeft | textSubstr(titleSubstr) }}
+      </div>
+      <div class="list-picker-panel" ref="moverleft" :style="getStyles">
         <div class="list-picker-item"
           v-for="item in unselectedItems"
           :key="item[attrKey]"
-          :class="{'list-picker-selected': item.isSelected}"
+          :class="[getContentClasses, {'list-picker-selected': item.isSelected}]"
           @click="selectUnselectItem(item, unselectedItems)"
           @mousemove="selectItem(item, selectedItems)"
           @mousedown="startDrag"
           >
-          {{ item[attrContent] }}
+          {{ item[attrContent] | textSubstr(contentSubstr) }}
         </div>
       </div>
     </div>
@@ -33,8 +35,10 @@
       </button>
     </div>
     <div class="list-picker-container list-picker-right">
-      <div class="list-picker-title">{{ titleRight }}</div>
-      <div class="list-picker-panel" ref="moverright">
+      <div class="list-picker-title" :class="getTitleClasses">
+        {{ titleRight | textSubstr(titleSubstr) }}
+      </div>
+      <div class="list-picker-panel" ref="moverright" :style="getStyles">
         <div class="list-picker-item"
           v-for="item in selectedItems"
           :key="item[attrKey]"
@@ -43,7 +47,7 @@
           @mousemove="selectItem(item, selectedItems)"
           @mousedown="startDrag"
           >
-          {{ item[attrContent] }}
+          {{ item[attrContent] | textSubstr(contentSubstr) }}
         </div>
       </div>
     </div>
@@ -81,6 +85,46 @@ export default {
     attrContent: {
       type: String,
       default: 'content'
+    },
+    titleCentered: {
+      type: Boolean,
+      default: false
+    },
+    titleClass: {
+      type: String,
+      default: ''
+    },
+    titleSubstr: {
+      type: Number,
+      default: 20
+    },
+    contentCentered: {
+      type: Boolean,
+      default: false
+    },
+    contentClass: {
+      type: String,
+      default: ''
+    },
+    contentSubstr: {
+      type: Number,
+      default: 23
+    },
+    minHeight: {
+      type: String,
+      default: '450px'
+    },
+    height: {
+      type: String,
+      default: ''
+    },
+    minWidth: {
+      type: String,
+      default: '220px'
+    },
+    width: {
+      type: String,
+      default: ''
     }
   },
   data: () => ({
@@ -88,6 +132,11 @@ export default {
     dragging: false,
     lastMovedItem: null
   }),
+  filters: {
+    textSubstr (value, qtd = 250, mask = '...') {
+      return value && value.length > qtd ? `${value.substring(0, qtd)}${mask}` : value
+    }
+  },
   computed: {
     unselectedItems: {
       get () {
@@ -103,6 +152,26 @@ export default {
       },
       set (val) {
         this.$emit('rightItems:update', val)
+      }
+    },
+    getTitleClasses () {
+      const { titleClass, titleCentered } = this
+
+      return titleClass || { 'text-center': titleCentered }
+    },
+    getContentClasses () {
+      const { contentClass, contentCentered } = this
+
+      return contentClass || { 'text-center': contentCentered }
+    },
+    getStyles () {
+      const { height, minHeight, minWidth, width } = this
+
+      return {
+        height,
+        minHeight,
+        minWidth,
+        width
       }
     }
   },
@@ -259,5 +328,8 @@ export default {
 }
 .vue-list-picker .mb-25 {
   margin-bottom: 25px;
+}
+.vue-list-picker .text-center {
+  text-align: center;
 }
 </style>

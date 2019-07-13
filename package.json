@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "storybook:build": "vue-cli-service storybook:build -c config/storybook",
-    "storybook": "vue-cli-service storybook:serve -p 6006 -c config/storybook",
+    "storybook": "start-storybook",
+    "storybook:old": "vue-cli-service storybook:serve -p 6006 -c config/storybook",
     "test:unit": "vue-cli-service test:unit",
     "test:watch": "vue-cli-service test:unit --watch",
     "commit": "git-cz",

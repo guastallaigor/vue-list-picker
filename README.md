@@ -125,6 +125,29 @@ export default {
 | line-color          | String  | '#03A9F4' | Color of the line inside the timeline                                                          |
 | clickable           | Boolean | true      | Makes the card clickable that returns the object                                               |
 
+## Instructions
+
+### Generics
+
+1. Right now there's no draggable depency. But if you click and hold your mouse down and drag it into another itens in the same column, all of them it'll selected.
+2. The title and content background are both blue (#0052c0), but you can change those using the `content-class` and `title-class` props.
+3. By default the height isn't set, but it has an `overflow-y` CSS property, so if you use the height prop, you'll have a vertical scroll inside each panel.
+4. If you pass anything other than `top` to `movedItemLocation`, the item after moved will go to the bottom.
+
+### Actions
+
+From top to bottom:
+
+The first button moves all the left items to the right.
+
+The second button moves all the **selected** left items to the right.
+
+The third button moves all the right items to the left.
+
+The fourth button moves all the **selected** right items to the left.
+
+The fifth button unselect all the **selected** items from **all** columns (left and right).
+
 ## Development
 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/guastallaigor/vue-list-picker/issues)
