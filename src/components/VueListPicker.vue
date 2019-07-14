@@ -19,24 +19,24 @@
     </div>
     <div class="list-picker-actions">
       <button @click="moveAllRight" :class="buttonClass">
-        <img src="../assets/chevrons-right.svg" alt="Chevrons right">
-        <template slot="moveAllRight"></template>
+        <img v-if="!this.$slots.moveAllRight" src="../assets/chevrons-right.svg" alt="Chevrons right">
+        <slot name="moveAllRight"/>
       </button>
       <button @click="moveRight" class="mb-25" :class="buttonClass">
-        <img src="../assets/chevron-right.svg" alt="Chevron right">
-        <template slot="moveRight"></template>
+        <img v-if="!this.$slots.moveRight" src="../assets/chevron-right.svg" alt="Chevron right">
+        <slot name="moveRight"/>
       </button>
       <button @click="moveLeft" :class="buttonClass">
-        <img src="../assets/chevron-left.svg" alt="Chevron left">
-        <template slot="moveLeft"></template>
+        <img v-if="!this.$slots.moveLeft" src="../assets/chevron-left.svg" alt="Chevron left">
+        <slot name="moveLeft"/>
       </button>
       <button @click="moveAllLeft" class="mb-25" :class="buttonClass">
-        <img src="../assets/chevrons-left.svg" alt="Chevrons left">
-        <template slot="moveAllLeft"></template>
+        <img v-if="!this.$slots.moveAllLeft" src="../assets/chevrons-left.svg" alt="Chevrons left">
+        <slot name="moveAllLeft"/>
       </button>
-      <button @click="unselectAll">
-        <img src="../assets/x.svg" alt="X icon" :class="buttonClass">
-        <template slot="unselectAll"></template>
+      <button @click="unselectAll" :class="buttonClass">
+        <img v-if="!this.$slots.unselectAll" src="../assets/x.svg" alt="X icon">
+        <slot name="unselectAll"/>
       </button>
     </div>
     <div class="list-picker-container list-picker-right">
@@ -223,10 +223,10 @@ export default {
       }
     },
     moveRight () {
-      this.moveOne(this.unselectedItems, this.selectedItems, 'moverleft')
+      this.moveOne(this.unselectedItems, this.selectedItems, 'moverleft', 'move-right')
     },
     moveLeft () {
-      this.moveOne(this.selectedItems, this.unselectedItems, 'moverright')
+      this.moveOne(this.selectedItems, this.unselectedItems, 'moverright', 'move-left')
     },
     unselect (items) {
       if (!items.length) return
@@ -239,8 +239,9 @@ export default {
     unselectAll () {
       this.unselect(this.unselectedItems)
       this.unselect(this.selectedItems)
+      this.$emit('unselect-all')
     },
-    moveOne (firstArray, secondArray, refsName) {
+    moveOne (firstArray, secondArray, refsName, event) {
       const items = firstArray.filter(itm => itm.isSelected)
       if (!items || !items.length) return
 
@@ -248,6 +249,7 @@ export default {
         firstArray.forEach((it, idx) => {
           if (it[this.contentKey] === item[this.contentKey]) {
             firstArray.splice(idx, 1)
+            this.$emit(event, it)
 
             if (this.movedItemLocation === 'top') {
               secondArray.unshift(it)
@@ -263,9 +265,11 @@ export default {
     },
     moveAllRight () {
       this.moveAll(this.unselectedItems, this.selectedItems)
+      this.$emit('move-all-right', this.selectedItems)
     },
     moveAllLeft () {
       this.moveAll(this.selectedItems, this.unselectedItems)
+      this.$emit('move-all-left', this.unselectedItems)
     },
     moveAll (firstArray, secondArray) {
       for (let i = firstArray.length - 1; i >= 0; i--) {

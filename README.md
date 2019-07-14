@@ -97,7 +97,7 @@ export default {
       key: 3,
       content: 'Item 3'
     }
-    
+
     const leftItems = [example1, example2, example3]
     const rightItems = [example1, example2, example3]
 
@@ -129,6 +129,26 @@ export default {
 | height              | String  | ''                | Height of each column                                                                           |
 | min-width           | String  | '220px'           | Min-width of each column                                                                        |
 | width               | String  | ''                | Width of each column                                                                            |
+
+## Events (optional usage)
+
+| Event name     | Return type | Description          |
+|----------------|-------------|----------------------|
+| move-all-right | Array       | Array of items moved |
+| move-right     | Object      | Item object moved    |
+| move-left      | Object      | Item object moved    |
+| move-all-left  | Array       | Array of items moved |
+| unselect-all   | Array       | Empty array          |
+
+## Slots (optional usage)
+
+| Slot name    | Description                                                                 |
+|--------------|-----------------------------------------------------------------------------|
+| moveAllRight | Use this to change the icon (chevrons-right) inside the first action button |
+| moveRight    | Use this to change the icon (chevron-right) inside the second action button |
+| moveLeft     | Use this to change the icon (chevron-left) inside the third action button   |
+| moveAllLeft  | Use this to change the icon (chevrons-left) inside the fourth action button |
+| unselectAll  | Use this to change the icon (x) inside the fifth action button              |
 
 ## Instructions
 

@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/vue'
 import { withKnobs, object, text, select, boolean, number } from '@storybook/addon-knobs'
+import { action } from '@storybook/addon-actions'
 import VueListPicker from '../src/components/VueListPicker'
 
 const listpickerStory = storiesOf('VueListPicker', module)
@@ -43,6 +44,13 @@ listpickerStory.add('Default', () => {
 
   return {
     components: { VueListPicker },
+    methods: {
+      moveLeft: action('move-left'),
+      moveRight: action('move-right'),
+      moveAllLeft: action('move-all-left'),
+      moveAllRight: action('move-all-right'),
+      unselectAll: action('unselect-all')
+    },
     props: {
       leftItems: {
         type: Array,
@@ -136,6 +144,11 @@ listpickerStory.add('Default', () => {
       :height="height"
       :min-width="minWidth"
       :width="width"
+      @move-left="moveLeft"
+      @move-right="moveRight"
+      @move-all-right="moveAllRight"
+      @move-all-left="moveAllLeft"
+      @unselect-all="unselectAll"
       />`
   }
 })
