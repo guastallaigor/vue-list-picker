@@ -1,6 +1,6 @@
 <p align="center">
   <img width="200px" src="./.github/logo.png"><br>
-  Simple Vue List Picker component
+  Just a simple list picker component made with Vue.js.
 </p>
 
 <p align="center">
@@ -76,27 +76,31 @@ plugins: [
 
 ```html
 <template>
-  <vue-list-picker :items="items"/>
+  <vue-list-picker 
+    :left-items="leftItems"
+    :right-items="rightItems"
+    />
 </template>
 
 <script>
 export default {  
   data() {
     const example1 = {
-      title: 'Title example 1',
+      key: 'Title example 1',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio.'
     }
     const example2 = {
-      title: 'Title example 2',
+      key: 'Title example 2',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio.'
     }
     const example3 = {
-      title: 'Title example 3',
+      key: 'Title example 3',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio.'
     }
-    const items = [example1, example2, example3]
+    const leftItems = [example1, example2, example3]
+    const rightItems = [example1, example2, example3]
 
-    return { items }
+    return { leftItems, rightItems }
   }
 }
 </script>
@@ -104,26 +108,26 @@ export default {
 
 ## Props
 
-| Property name       | Type    | Default   | Description                                                                                    |
-|---------------------|--------:|:---------:|------------------------------------------------------------------------------------------------|
-| items               | Array   | null      | Array of objects to be displayed. Must have at least a content property                        |
-| item-selected       | Object  | {}        | Object that is set when it is clicked. Note that `clickable` prop must be set to true          |
-| item-unique-key     | String  | ''        | Key to set a blue border to the card when it is clicked (`clickable` prop must be set to true) |
-| title-attr          | String  | 'title'   | Name of the property inside the objects, that are in the items array, to set the cards title   |
-| title-centered      | Boolean | false     | Centralizes the cards title                                                                    |
-| title-class         | String  | ''        | If you want to set a custom class to the cards title, set it here                              |
-| title-substr        | String  | 18        | Number of characters to display inside the cards title. Above this, will set a '...' mask      |
-| content-attr        | String  | 'content' | Name of the property inside the objects, that are in the items array, to set the cards content |
-| content-centered    | Boolean | false     | Centralizes all the cards content text                                                         |
-| content-class       | String  | ''        | If you want to set a custom class to the cards content, set it here                            |
-| content-substr      | String  | 250       | Number of characters to display inside the cards content. Above this, will set a '...' mask    |
-| has-slot            | String  | true      | Set to true if you pass a `<slot>` to override `title` and `content` attributes                |
-| min-width           | String  | '200px'   | Min-width of the timeline                                                                      |
-| min-height          | String  | ''        | Min-height of the timeline                                                                     |
-| timeline-padding    | String  | ''        | Padding of the timeline                                                                        |
-| timeline-background | String  | '#E9E9E9' | Background color of the whole timeline                                                         |
-| line-color          | String  | '#03A9F4' | Color of the line inside the timeline                                                          |
-| clickable           | Boolean | true      | Makes the card clickable that returns the object                                               |
+| Property name       | Type    | Default           | Description                                                                                     |
+|---------------------|---------|-------------------|-------------------------------------------------------------------------------------------------|
+| left-items          | Array   | null              | Array of objects to be displayed in the left. Must have at least a key and content property     |
+| right-items         | Array   | null              | Array of objects to be displayed in the right. Must have at least a key and content property    |
+| moved-item-location | String  | 'top'             | After move a item, if this is set to top will move the item to the top, otherwise to the bottom |
+| title-left          | String  | 'Items available' | Title name of the left column                                                                   |
+| title-right         | String  | 'Items selected'  | Title name of the right column                                                                  |
+| title-centered      | Boolean | true              | Centralizes the title text                                                                      |
+| title-class         | String  | ''                | If you want to set a custom class to the columns title, set it here                             |
+| title-substr        | String  | 20                | Number of characters to display inside the columns title. Above this, will set a '...' mask     |
+| button-class        | String  | ''                | If you want to set a custom class to all the buttons in between the columns, set it here        |
+| content-key         | String  | 'key'             | Property name inside the objects inside each items array, that will be used to move the object  |
+| content-attr        | String  | 'content'         | Property name inside the objects inside each items array, that will set the text content        |
+| content-centered    | Boolean | false             | Centralizes all the text content                                                                |
+| content-class       | String  | ''                | If you want to set a custom class to the each content item, set it here                         |
+| content-substr      | String  | 23                | Number of characters to display inside the content item. Above this, will set a '...' mask      |
+| min-height          | String  | '450px'           | Min-height of each column                                                                       |
+| height              | String  | ''                | Height of each column                                                                           |
+| min-width           | String  | '220px'           | Min-width of each column                                                                        |
+| width               | String  | ''                | Width of each column                                                                            |
 
 ## Instructions
 
@@ -133,20 +137,17 @@ export default {
 2. The title and content background are both blue (#0052c0), but you can change those using the `content-class` and `title-class` props.
 3. By default the height isn't set, but it has an `overflow-y` CSS property, so if you use the height prop, you'll have a vertical scroll inside each panel.
 4. If you pass anything other than `top` to `movedItemLocation`, the item after moved will go to the bottom.
+5. The content key should be an unique key inside each array of objects (`left-items` / `right-items`).
 
 ### Actions
 
 From top to bottom:
 
-The first button moves all the left items to the right.
-
-The second button moves all the **selected** left items to the right.
-
-The third button moves all the right items to the left.
-
-The fourth button moves all the **selected** right items to the left.
-
-The fifth button unselect all the **selected** items from **all** columns (left and right).
+1. The first button moves all the left items to the right.
+2. The second button moves all the **selected** left items to the right.
+3. The third button moves all the right items to the left.
+4. The fourth button moves all the **selected** right items to the left.
+5. The fifth button unselect all the **selected** items from **all** columns (left and right).
 
 ## Development
 
@@ -163,7 +164,7 @@ yarn
 ### Storybook
 For visual testing, this project contains storybook which you can run by doing the next command
 ```sh
-$ yarn storybook:serve
+$ yarn storybook
 ```
 
 ### Jest

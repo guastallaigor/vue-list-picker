@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/vue'
-import { withKnobs, object, text, select } from '@storybook/addon-knobs'
-// import { action } from '@storybook/addon-actions'
+import { withKnobs, object, text, select, boolean, number } from '@storybook/addon-knobs'
 import VueListPicker from '../src/components/VueListPicker'
 
 const listpickerStory = storiesOf('VueListPicker', module)
@@ -45,18 +44,6 @@ listpickerStory.add('Default', () => {
   return {
     components: { VueListPicker },
     props: {
-      titleLeft: {
-        type: String,
-        default: text('Title of the left column', 'Items available')
-      },
-      titleRight: {
-        type: String,
-        default: text('Title of the right column', 'Items selected')
-      },
-      movedItemLocation: {
-        type: String,
-        default: select('Move item to top or bottom', { top: 'top', bottom: 'bottom' }, 'top')
-      },
       leftItems: {
         type: Array,
         default: [ ...leftItems.map(it => ({ ...it })) ]
@@ -65,23 +52,90 @@ listpickerStory.add('Default', () => {
         type: Array,
         default: [ ...rightItems.map(it => ({ ...it })) ]
       },
-      attrKey: {
+      movedItemLocation: {
         type: String,
-        default: text('Attribute key', 'key')
+        default: select('Move item to top or bottom', { top: 'top', bottom: 'bottom' }, 'top')
       },
-      attrContent: {
+      titleLeft: {
         type: String,
-        default: text('Attribute content', 'content')
+        default: text('Title of the left column', 'Items available')
+      },
+      titleRight: {
+        type: String,
+        default: text('Title of the right column', 'Items selected')
+      },
+      titleCentered: {
+        type: Boolean,
+        default: boolean('Title centered text', true)
+      },
+      titleClass: {
+        type: String,
+        default: text('Title custom class', '')
+      },
+      titleSubstr: {
+        type: Number,
+        default: number('Title substring', 20)
+      },
+      buttonClass: {
+        type: String,
+        default: text('Button custom class', '')
+      },
+      contentKey: {
+        type: String,
+        default: text('Content attribute key', 'key')
+      },
+      contentAttr: {
+        type: String,
+        default: text('Content attribute text', 'content')
+      },
+      contentCentered: {
+        type: Boolean,
+        default: boolean('Content centered text', false)
+      },
+      contentClass: {
+        type: String,
+        default: text('Content custom class', '')
+      },
+      contentSubstr: {
+        type: Number,
+        default: number('Content substring', 23)
+      },
+      minHeight: {
+        type: String,
+        default: text('Min height of each column', '450px')
+      },
+      height: {
+        type: String,
+        default: text('Height of each column', '')
+      },
+      minWidth: {
+        type: String,
+        default: text('Min width of each column', '220px')
+      },
+      width: {
+        type: String,
+        default: text('Width of each column', '')
       }
     },
     template: `<vue-list-picker
-      :title-left="titleLeft"
-      :title-right="titleRight"
-      :moved-item-location="movedItemLocation"
       :left-items="leftItems"
       :right-items="rightItems"
-      :attr-key="attrKey"
-      :attr-content="attrContent"
+      :moved-item-location="movedItemLocation"
+      :title-left="titleLeft"
+      :title-right="titleRight"
+      :title-centered="titleCentered"
+      :title-class="titleClass"
+      :title-substr="titleSubstr"
+      :button-class="buttonClass"
+      :content-key="contentKey"
+      :content-attr="contentAttr"
+      :content-centered="contentCentered"
+      :content-class="contentClass"
+      :content-substr="contentSubstr"
+      :min-height="minHeight"
+      :height="height"
+      :min-width="minWidth"
+      :width="width"
       />`
   }
 })

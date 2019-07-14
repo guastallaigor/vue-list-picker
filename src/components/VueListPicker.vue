@@ -7,31 +7,36 @@
       <div class="list-picker-panel" ref="moverleft" :style="getStyles">
         <div class="list-picker-item"
           v-for="item in unselectedItems"
-          :key="item[attrKey]"
+          :key="item[contentKey]"
           :class="[getContentClasses, {'list-picker-selected': item.isSelected}]"
           @click="selectUnselectItem(item, unselectedItems)"
           @mousemove="selectItem(item, selectedItems)"
           @mousedown="startDrag"
           >
-          {{ item[attrContent] | textSubstr(contentSubstr) }}
+          {{ item[contentAttr] | textSubstr(contentSubstr) }}
         </div>
       </div>
     </div>
     <div class="list-picker-actions">
-      <button @click="moveAllRight">
+      <button @click="moveAllRight" :class="buttonClass">
         <img src="../assets/chevrons-right.svg" alt="Chevrons right">
+        <template slot="moveAllRight"></template>
       </button>
-      <button @click="moveRight" class="mb-25">
+      <button @click="moveRight" class="mb-25" :class="buttonClass">
         <img src="../assets/chevron-right.svg" alt="Chevron right">
+        <template slot="moveRight"></template>
       </button>
-      <button @click="moveLeft">
+      <button @click="moveLeft" :class="buttonClass">
         <img src="../assets/chevron-left.svg" alt="Chevron left">
+        <template slot="moveLeft"></template>
       </button>
-      <button @click="moveAllLeft" class="mb-25">
+      <button @click="moveAllLeft" class="mb-25" :class="buttonClass">
         <img src="../assets/chevrons-left.svg" alt="Chevrons left">
+        <template slot="moveAllLeft"></template>
       </button>
-      <button @click="unselectedAll">
-        <img src="../assets/x.svg" alt="X icon">
+      <button @click="unselectAll">
+        <img src="../assets/x.svg" alt="X icon" :class="buttonClass">
+        <template slot="unselectAll"></template>
       </button>
     </div>
     <div class="list-picker-container list-picker-right">
@@ -41,13 +46,13 @@
       <div class="list-picker-panel" ref="moverright" :style="getStyles">
         <div class="list-picker-item"
           v-for="item in selectedItems"
-          :key="item[attrKey]"
+          :key="item[contentKey]"
           :class="{'list-picker-selected': item.isSelected}"
           @click="selectUnselectItem(item, selectedItems)"
           @mousemove="selectItem(item, selectedItems)"
           @mousedown="startDrag"
           >
-          {{ item[attrContent] | textSubstr(contentSubstr) }}
+          {{ item[contentAttr] | textSubstr(contentSubstr) }}
         </div>
       </div>
     </div>
@@ -58,6 +63,18 @@
 export default {
   name: 'VueListPicker',
   props: {
+    leftItems: {
+      type: Array,
+      required: true
+    },
+    rightItems: {
+      type: Array,
+      required: true
+    },
+    movedItemLocation: {
+      type: String,
+      default: 'top'
+    },
     titleLeft: {
       type: String,
       default: 'Items available'
@@ -66,29 +83,9 @@ export default {
       type: String,
       default: 'Items selected'
     },
-    movedItemLocation: {
-      type: String,
-      default: 'top'
-    },
-    leftItems: {
-      type: Array,
-      default: () => ([])
-    },
-    rightItems: {
-      type: Array,
-      default: () => ([])
-    },
-    attrKey: {
-      type: String,
-      default: 'key'
-    },
-    attrContent: {
-      type: String,
-      default: 'content'
-    },
     titleCentered: {
       type: Boolean,
-      default: false
+      default: true
     },
     titleClass: {
       type: String,
@@ -97,6 +94,18 @@ export default {
     titleSubstr: {
       type: Number,
       default: 20
+    },
+    buttonClass: {
+      type: String,
+      default: ''
+    },
+    contentKey: {
+      type: String,
+      default: 'key'
+    },
+    contentAttr: {
+      type: String,
+      default: 'content'
     },
     contentCentered: {
       type: Boolean,
@@ -227,7 +236,7 @@ export default {
       })
       this.$forceUpdate()
     },
-    unselectedAll () {
+    unselectAll () {
       this.unselect(this.unselectedItems)
       this.unselect(this.selectedItems)
     },
@@ -237,7 +246,7 @@ export default {
 
       items.forEach(item => {
         firstArray.forEach((it, idx) => {
-          if (it[this.attrKey] === item[this.attrKey]) {
+          if (it[this.contentKey] === item[this.contentKey]) {
             firstArray.splice(idx, 1)
 
             if (this.movedItemLocation === 'top') {
@@ -250,7 +259,7 @@ export default {
         })
       })
 
-      this.unselectedAll()
+      this.unselectAll()
     },
     moveAllRight () {
       this.moveAll(this.unselectedItems, this.selectedItems)
@@ -265,7 +274,7 @@ export default {
         secondArray.push(item)
       }
 
-      this.unselectedAll()
+      this.unselectAll()
     }
   }
 }
@@ -319,7 +328,6 @@ export default {
   color: #0052c0;
   font-size: 1.1em;
   font-weight: 600;
-  text-align: center;
 }
 .vue-list-picker .list-picker-selected {
   background: #0052c0;
