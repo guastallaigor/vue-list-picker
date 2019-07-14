@@ -185,8 +185,12 @@ export default {
     }
   },
   created () {
-    this.unselectedItems = this.unselectedItems.map(it => ({ ...it, isSelected: false }))
-    this.selectedItems = this.selectedItems.map(it => ({ ...it, isSelected: false }))
+    this.unselectedItems = this.unselectedItems && this.unselectedItems.length
+      ? this.unselectedItems.map(it => ({ ...it, isSelected: false }))
+      : []
+    this.selectedItems = this.selectedItems && this.selectedItems.length
+      ? this.selectedItems.map(it => ({ ...it, isSelected: false }))
+      : []
   },
   mounted () {
     document.addEventListener('mouseup', this.stopDrag)

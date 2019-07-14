@@ -72,6 +72,8 @@ plugins: [
 ]
 ```
 
+There's a window mouseup event listener so you should use the `<no-ssr>` tag
+
 ## Basic usage
 
 ```html
