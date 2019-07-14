@@ -86,17 +86,18 @@ plugins: [
 export default {  
   data() {
     const example1 = {
-      key: 'Title example 1',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio.'
+      key: 1,
+      content: 'Item 1'
     }
     const example2 = {
-      key: 'Title example 2',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio.'
+      key: 2,
+      content: 'Item 2'
     }
     const example3 = {
-      key: 'Title example 3',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio.'
+      key: 3,
+      content: 'Item 3'
     }
+    
     const leftItems = [example1, example2, example3]
     const rightItems = [example1, example2, example3]
 
