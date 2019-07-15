@@ -36,6 +36,11 @@ describe('When I create the VueListPicker component', () => {
       }
     })
   }
+  const createEvent = (type, props = {}) => {
+    const event = new Event(type)
+    Object.assign(event, props)
+    return event
+  }
 
   it('should be a Vue instance', () => {
     const wrapper = createListPickerWrapper({ leftItems, rightItems })
@@ -99,6 +104,34 @@ describe('When I create the VueListPicker component', () => {
     expect(titleRight.required).toBeFalsy()
     expect(titleRight.type).toBe(String)
     expect(titleRight.default).toBe('Items selected')
+    const titleCentered = wrapper.vm.$options.props.titleCentered
+    expect(titleCentered.required).toBeFalsy()
+    expect(titleCentered.type).toBe(Boolean)
+    expect(titleCentered.default).toBe(true)
+    const titleSubstr = wrapper.vm.$options.props.titleSubstr
+    expect(titleSubstr.required).toBeFalsy()
+    expect(titleSubstr.type).toBe(Number)
+    expect(titleSubstr.default).toBe(20)
+    const contentKey = wrapper.vm.$options.props.contentKey
+    expect(contentKey.required).toBeFalsy()
+    expect(contentKey.type).toBe(String)
+    expect(contentKey.default).toBe('key')
+    const contentAttr = wrapper.vm.$options.props.contentAttr
+    expect(contentAttr.required).toBeFalsy()
+    expect(contentAttr.type).toBe(String)
+    expect(contentAttr.default).toBe('content')
+    const contentSubstr = wrapper.vm.$options.props.contentSubstr
+    expect(contentSubstr.required).toBeFalsy()
+    expect(contentSubstr.type).toBe(Number)
+    expect(contentSubstr.default).toBe(23)
+    const minHeight = wrapper.vm.$options.props.minHeight
+    expect(minHeight.required).toBeFalsy()
+    expect(minHeight.type).toBe(String)
+    expect(minHeight.default).toBe('450px')
+    const minWidth = wrapper.vm.$options.props.minWidth
+    expect(minWidth.required).toBeFalsy()
+    expect(minWidth.type).toBe(String)
+    expect(minWidth.default).toBe('220px')
     const component = wrapper.find('.vue-list-picker')
     expect(component.exists()).toBe(true)
     const leftTitle = wrapper.find('.vue-list-picker>.list-picker-left>.list-picker-title')
@@ -221,6 +254,25 @@ describe('When I create the VueListPicker component', () => {
     }
   })
 
+  it('should add a custom-class to both the columns title', () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems, titleClass: 'custom-class' })
+    const items = wrapper.findAll('.list-picker-title')
+    for (let i = 0; i < items.length; i++) {
+      expect(items.at(i).exists()).toBe(true)
+      expect(items.at(i).classes().length).toBe(2)
+      expect(items.at(i).classes()).toContainEqual('custom-class')
+    }
+  })
+
+  it('should add a custom-class to all the action buttons', () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems, buttonClass: 'custom-class' })
+    const items = wrapper.findAll('button')
+    for (let i = 0; i < items.length; i++) {
+      expect(items.at(i).exists()).toBe(true)
+      expect(items.at(i).classes()).toContainEqual('custom-class')
+    }
+  })
+
   it('should add text-center class to the items content', () => {
     const wrapper = createListPickerWrapper({ leftItems, rightItems, contentCentered: true })
     const items = wrapper.findAll('.list-picker-item')
@@ -308,112 +360,294 @@ describe('When I create the VueListPicker component', () => {
   })
 
   it('should be able to move all the left items to the right calling the method directly', async () => {
-    const expected = leftItems.map(it => ({ ...it, isSelected: false })).sort((a,b) => b.key - a.key)
-    const wrapper = createListPickerWrapper({ leftItems, rightItems: [] })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.unselectedItems).toEqual(leftItems)
+    const expected = leftItems.map(it => ({ ...it, isSelected: false })).sort((a, b) => b.key - a.key)
+    const copyLeft = leftItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems: [] })
+    expect(wrapper.vm.unselectedItems).toEqual(copyLeft)
     expect(wrapper.vm.selectedItems).toEqual([])
-    await wrapper.vm.$nextTick()
     wrapper.vm.moveAllRight()
+    await wrapper.vm.$nextTick()
     expect(wrapper.emitted()['move-all-right']).toBeTruthy()
     expect(wrapper.emitted()['move-all-right'][0]).toEqual([expected])
-    // WIP
-    // expect(wrapper.vm.).toBe(rightItems)
-    // const firstButton = wrapper.find('.list-picker-actions>button:nth-child(1)')
-    // firstButton.trigger('click')
-    // expect(firstButton.exists()).toBe(true)
-    // expect(wrapper.vm.moveAllRight).toHaveBeenCalledTimes(1)
+    expect(wrapper.emitted()['unselect-all']).toBeTruthy()
+    expect(wrapper.emitted()['unselect-all'][0]).toEqual([])
+    expect(copyLeft).toEqual([])
+    expect(wrapper.vm.unselectedItems).toEqual([])
+    expect(wrapper.vm.selectedItems).toEqual(expected)
   })
 
-  // it('should emit a click event when clicked on any timeline card', () => {
-  //   const wrapper = createListPickerWrapper({ items })
+  it('should be able to move all the right items to the left calling the method directly', async () => {
+    const expected = rightItems.map(it => ({ ...it, isSelected: false })).sort((a, b) => b.key - a.key)
+    const copyRight = rightItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: [], rightItems: copyRight })
+    expect(wrapper.vm.unselectedItems).toEqual([])
+    expect(wrapper.vm.selectedItems).toEqual(copyRight)
+    wrapper.vm.moveAllLeft()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted()['move-all-left']).toBeTruthy()
+    expect(wrapper.emitted()['move-all-left'][0]).toEqual([expected])
+    expect(wrapper.emitted()['unselect-all']).toBeTruthy()
+    expect(wrapper.emitted()['unselect-all'][0]).toEqual([])
+    expect(copyRight).toEqual([])
+    expect(wrapper.vm.unselectedItems).toEqual(expected)
+    expect(wrapper.vm.selectedItems).toEqual([])
+  })
 
-  //   const time = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time')
-  //   time.trigger('click')
-  //   time.trigger('click')
-  //   time.trigger('click')
+  it('should be able to move items using the moveAll method directly', async () => {
+    const expected = [
+      ...rightItems.map(it => ({ ...it, isSelected: false })).sort((a, b) => a.key - b.key),
+      ...leftItems.map(it => ({ ...it, isSelected: false })).sort((a, b) => b.key - a.key)
+    ]
+    const copyLeft = leftItems.map(it => ({ ...it }))
+    const copyRight = rightItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems: copyRight })
+    wrapper.vm.moveAll(copyLeft, copyRight)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted()['unselect-all']).toBeTruthy()
+    expect(wrapper.emitted()['unselect-all'][0]).toEqual([])
+    expect(copyLeft).toEqual([])
+    expect(wrapper.vm.unselectedItems).toEqual([])
+    expect(wrapper.vm.selectedItems).toEqual(expected)
+  })
 
-  //   expect(wrapper.emitted('click')).toBeTruthy()
-  //   expect(wrapper.emitted('click').length).toBe(3)
-  // })
+  it('should be able to move one select item from the left to the right', async () => {
+    const copyLeft = leftItems.map(it => ({ ...it }))
+    const copyRight = rightItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems: copyRight })
+    const firstItemSelector = '.vue-list-picker>.list-picker-left>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    firstItem.trigger('click')
+    expect(firstItem.exists()).toBe(true)
+    expect(firstItem.classes()).toContainEqual('list-picker-selected')
+    expect(wrapper.vm.unselectedItems[0].isSelected).toBeTruthy()
+    wrapper.vm.moveRight()
+    await wrapper.vm.$nextTick()
+    const firstObj = { ...leftItems[0], isSelected: false }
+    expect(wrapper.emitted()['move-right']).toBeTruthy()
+    expect(wrapper.emitted()['move-right'][0]).toEqual([firstObj])
+    await wrapper.vm.$nextTick()
+    const firstItemAfter = wrapper.find(firstItemSelector)
+    expect(firstItemAfter.classes()).not.toContainEqual('list-picker-selected')
+    expect(wrapper.vm.unselectedItems[0].isSelected).toBeFalsy()
+  })
 
-  // it('should change the color of the line inside the timeline to black when the prop lineColor is set to black', () => {
-  //   const wrapper = createListPickerWrapper({ items, lineColor: 'black' })
+  it('should be able to move one select item from the right to the left', async () => {
+    const copyLeft = leftItems.map(it => ({ ...it }))
+    const copyRight = rightItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems: copyRight })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    firstItem.trigger('click')
+    expect(firstItem.exists()).toBe(true)
+    expect(firstItem.classes()).toContainEqual('list-picker-selected')
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
+    wrapper.vm.moveLeft()
+    await wrapper.vm.$nextTick()
+    const firstObj = { ...rightItems[0], isSelected: false }
+    expect(wrapper.emitted()['move-left']).toBeTruthy()
+    expect(wrapper.emitted()['move-left'][0]).toEqual([firstObj])
+    await wrapper.vm.$nextTick()
+    const firstItemAfter = wrapper.find(firstItemSelector)
+    expect(firstItemAfter.classes()).not.toContainEqual('list-picker-selected')
+    expect(wrapper.vm.unselectedItems[0].isSelected).toBeFalsy()
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeFalsy()
+  })
 
-  //   const lis = wrapper.findAll('.vue-list-picker>section.timeline>ol>li')
-  //   const li1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child')
-  //   const li2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)')
-  //   const li3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)')
+  it('should be able to unselect all', async () => {
+    const copyLeft = leftItems.map(it => ({ ...it }))
+    const copyRight = rightItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems: copyRight })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    firstItem.trigger('click')
+    expect(firstItem.exists()).toBe(true)
+    expect(firstItem.classes()).toContainEqual('list-picker-selected')
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
+    wrapper.vm.unselectAll()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted()['unselect-all']).toBeTruthy()
+    expect(wrapper.emitted()['unselect-all'][0]).toEqual([])
+    await wrapper.vm.$nextTick()
+    const firstItemAfter = wrapper.find(firstItemSelector)
+    expect(firstItemAfter.classes()).not.toContainEqual('list-picker-selected')
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeFalsy()
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeFalsy()
+  })
 
-  //   // one more is created empty
-  //   expect(lis.length).toBe(4)
-  //   expect(li1.attributes().style).toBe('background: black;')
-  //   expect(li2.attributes().style).toBe('background: black;')
-  //   expect(li3.attributes().style).toBe('background: black;')
-  //   expect(wrapper.props().lineColor).toBe('black')
-  //   expect(wrapper.vm.setLineColor).toBe('background: black')
-  // })
+  it('should move an item to the bottom of the other column', async () => {
+    const copyLeft = leftItems.map(it => ({ ...it }))
+    const copyRight = rightItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems: copyRight, movedItemLocation: 'bottom' })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    firstItem.trigger('click')
+    expect(firstItem.exists()).toBe(true)
+    expect(firstItem.classes()).toContainEqual('list-picker-selected')
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
+    const copy = { ...wrapper.vm.selectedItems[0], isSelected: false }
+    wrapper.vm.moveLeft()
+    await wrapper.vm.$nextTick()
+    const firstItemAfter = wrapper.find(firstItemSelector)
+    expect(firstItemAfter.classes()).not.toContainEqual('list-picker-selected')
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeFalsy()
+    expect(wrapper.vm.unselectedItems[0].isSelected).toBeFalsy()
+    expect(wrapper.vm.unselectedItems[wrapper.vm.unselectedItems.length - 1]).toEqual(copy)
+  })
 
-  // it('should add a custom-class to the cards title when titleClass prop is set to custom-class', () => {
-  //   const wrapper = createListPickerWrapper({ items, titleClass: 'custom-class' })
+  it('should move an item to the top of the other column', async () => {
+    const copyLeft = leftItems.map(it => ({ ...it }))
+    const copyRight = rightItems.map(it => ({ ...it }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems: copyRight, movedItemLocation: 'top' })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    firstItem.trigger('click')
+    expect(firstItem.exists()).toBe(true)
+    expect(firstItem.classes()).toContainEqual('list-picker-selected')
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
+    const copy = { ...wrapper.vm.selectedItems[0], isSelected: false }
+    wrapper.vm.moveLeft()
+    await wrapper.vm.$nextTick()
+    const firstItemAfter = wrapper.find(firstItemSelector)
+    expect(firstItemAfter.classes()).not.toContainEqual('list-picker-selected')
+    expect(wrapper.vm.selectedItems[0].isSelected).toBeFalsy()
+    expect(wrapper.vm.unselectedItems[0].isSelected).toBeFalsy()
+    expect(wrapper.vm.unselectedItems[0]).toEqual(copy)
+  })
 
-  //   const title1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.title')
-  //   const title2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)>.time>span.title')
-  //   const title3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)>.time>span.title')
-  //   const arr = [title1, title2, title3]
+  it('should hold mouse down to start drag and up to stop drag', async () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    expect(firstItem.exists()).toBe(true)
+    firstItem.trigger('mousedown')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.dragging).toBeTruthy()
+    window.document.dispatchEvent(
+      createEvent('mouseup', { clientX: 0, clientY: 0 })
+    )
+    firstItem.trigger('mouseup')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.dragging).toBeFalsy()
+  })
 
-  //   for (var i = 0; i < 3; i++) {
-  //     expect(arr[i].exists()).toBe(true)
-  //     expect(arr[i].classes().length).toBe(2)
-  //     expect(arr[i].classes()).toContainEqual('custom-class')
-  //   }
-  // })
+  it('should hold mouse down to start drag and select items when is dragging', async () => {
+    const copyLeft = leftItems.map(it => ({ ...it, isSelected: false }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    expect(firstItem.exists()).toBe(true)
+    firstItem.trigger('mousedown')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.dragging).toBeTruthy()
+    const cells = Array.from(wrapper.vm.$el.querySelectorAll('.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'))
+    cells[0].dispatchEvent(
+      createEvent('dragstart', { clientX: 0, clientY: 0 })
+    )
+    cells[0].dispatchEvent(
+      createEvent('drop', { clientX: 0, clientY: 15 })
+    )
+    await wrapper.vm.$nextTick()
+    const copy = { ...value2, isSelected: false }
+    wrapper.vm.selectItem(copy, copyLeft)
+    const secondItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(2)'
+    const secondItem = wrapper.find(secondItemSelector)
+    expect(secondItem.exists()).toBe(true)
+    expect(copy.isSelected).toBeTruthy()
+  })
 
-  // it('should have a blue border when itemUniqueKey and itemSelected is passed and a card is clicked', (done) => {
-  //   const itemSelected = items[0]
-  //   const wrapper = createListPickerWrapper({ items, itemSelected, itemUniqueKey: 'title', clickable: true })
-  //   const time = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time:first-child')
-  //   time.trigger('click')
-  //   const expected = {
-  //     title: 'Title example 1',
-  //     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio. Nullam non condimentum orci, a cursus magna. Suspendisse tempor rutrum eros, non pellentesque odio commodo eu. Donec at volutpat enim. Vivamus mattis volutpat urna, sit amet vulputate mauris sollicitudin et. Proin consequat at dolor in sodales. Vestibulum vel porta turpis. Pellentesque sollicitudin justo est, ut dapibus felis luctus mollis. Suspendisse feugiat, metus ut auctor dictum, nulla dui fringilla nisl, a pulvinar ipsum justo non lacus. Integer vestibulum sapien metus, et congue felis efficitur iaculis. Aliquam et mi quis nulla molestie elementum. Vestibulum in nibh nibh.'
-  //   }
-  //   expect(time.exists()).toBe(true)
-  //   expect(wrapper.emitted('click')).toBeTruthy()
-  //   expect(wrapper.emitted('click')).toEqual([[expected]])
-  //   setTimeout(() => {
-  //     expect(time.classes().length).toBe(2)
-  //     expect(time.classes()).toContainEqual('border-blue')
-  //     done()
-  //   })
-  // })
+  it('should remove event listener global', async () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    expect(firstItem.exists()).toBe(true)
+    firstItem.trigger('mousedown')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.dragging).toBeTruthy()
+    window.document.dispatchEvent(
+      createEvent('mouseup', { clientX: 0, clientY: 0 })
+    )
+    firstItem.trigger('mouseup')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.dragging).toBeFalsy()
+    wrapper.destroy()
+    window.document.dispatchEvent(
+      createEvent('mouseup', { clientX: 0, clientY: 0 })
+    )
+    await wrapper.vm.$nextTick()
+    expect(wrapper.exists()).toBeFalsy()
+    expect(wrapper.vm.dragging).toBeFalsy()
+  })
 
-  // it('should match snapshot', () => {
-  //   const itemSelected = {
-  //     title: 'title',
-  //     content: 'content'
-  //   }
-  //   const wrapper = createListPickerWrapper({
-  //     items,
-  //     itemSelected,
-  //     itemUniqueKey: 'title',
-  //     titleAttr: 'title',
-  //     titleCentered: false,
-  //     titleClass: '',
-  //     titleSubstr: 18,
-  //     contentAttr: 'content',
-  //     contentCentered: false,
-  //     contentClass: '',
-  //     contentSubstr: 250,
-  //     hasSlot: false,
-  //     minWidth: '200px',
-  //     minHeight: '',
-  //     timelinePadding: '',
-  //     timelineBackground: '',
-  //     lineColor: '#03A9F4',
-  //     clickable: true
-  //   })
+  it('should select the first item if the item passed to it is invalid', async () => {
+    const copyLeft = leftItems.map(it => ({ ...it, isSelected: false }))
+    const wrapper = createListPickerWrapper({ leftItems: copyLeft, rightItems })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    expect(firstItem.exists()).toBe(true)
+    wrapper.vm.setItem(null, copyLeft, true)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.unselectedItems[0].isSelected).toBeTruthy()
+  })
 
-  //   expect(wrapper.html()).toMatchSnapshot()
-  // })
+  it('should do nothing if no first item and no item is passed', async () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    expect(firstItem.exists()).toBe(true)
+    const items = null
+    wrapper.vm.setItem(null, null, true)
+    await wrapper.vm.$nextTick()
+    expect(items).toBeFalsy()
+  })
+
+  it('should start drag calling the method directly', async () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    expect(firstItem.exists()).toBe(true)
+    firstItem.trigger('mousedown')
+    await wrapper.vm.$nextTick()
+    const copyLeft = leftItems.map(it => ({ ...it, isSelected: false }))
+    const copy = { ...value1, isSelected: false }
+    wrapper.vm.selectItem(copy, copyLeft)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.dragging).toBeTruthy()
+  })
+
+  it('should do nothing when trying to selectItem without starting mouse drag first', async () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems })
+    const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
+    const firstItem = wrapper.find(firstItemSelector)
+    expect(firstItem.exists()).toBe(true)
+    const copyLeft = leftItems.map(it => ({ ...it, isSelected: false }))
+    const copy = { ...value1, isSelected: false }
+    wrapper.vm.selectItem(copy, copyLeft)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.dragging).toBeFalsy()
+  })
+
+  it('should match snapshot', () => {
+    const wrapper = createListPickerWrapper({
+      leftItems,
+      rightItems,
+      movedItemLocation: 'top',
+      titleLeft: 'Items available',
+      titleRight: 'Items selected',
+      titleCentered: true,
+      titleClass: '',
+      titleSubstr: 20,
+      buttonClass: '',
+      contentKey: 'key',
+      contentAttr: 'content',
+      contentCentered: false,
+      contentClass: '',
+      contentSubstr: 23,
+      minHeight: '450px',
+      height: '',
+      minWidth: '220px',
+      width: ''
+    })
+
+    expect(wrapper.html()).toMatchSnapshot()
+  })
 })

@@ -211,7 +211,7 @@ export default {
     setItem (item, items, val) {
       let itemBase = item
 
-      if (items.length && !itemBase) {
+      if (items && items.length && !itemBase) {
         itemBase = items[0]
       }
 

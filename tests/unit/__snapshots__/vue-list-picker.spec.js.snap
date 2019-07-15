@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`When I create the VueListPicker component should match snapshot 1`] = `
+<div class="vue-list-picker">
+  <div class="list-picker-container list-picker-left">
+    <div class="list-picker-title text-center">
+      Items available
+    </div>
+    <div class="list-picker-panel" style="min-height: 450px; min-width: 220px;">
+      <div class="list-picker-item">
+        Item 1
+      </div>
+      <div class="list-picker-item">
+        Item 2
+      </div>
+      <div class="list-picker-item">
+        Item 3
+      </div>
+    </div>
+  </div>
+  <div class="list-picker-actions"><button class=""><img src="../assets/chevrons-right.svg" alt="Chevrons right"> </button> <button class="mb-25"><img src="../assets/chevron-right.svg" alt="Chevron right"> </button> <button class=""><img src="../assets/chevron-left.svg" alt="Chevron left"> </button> <button class="mb-25"><img src="../assets/chevrons-left.svg" alt="Chevrons left"> </button> <button class=""><img src="../assets/x.svg" alt="X icon"> </button></div>
+  <div class="list-picker-container list-picker-right">
+    <div class="list-picker-title text-center">
+      Items selected
+    </div>
+    <div class="list-picker-panel" style="min-height: 450px; min-width: 220px;">
+      <div class="list-picker-item">
+        Item 4
+      </div>
+      <div class="list-picker-item">
+        Item 5
+      </div>
+      <div class="list-picker-item">
+        Item 6
+      </div>
+    </div>
+  </div>
+</div>
+`;
