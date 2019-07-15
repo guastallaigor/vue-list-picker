@@ -15,7 +15,7 @@
 
 [![Edit Checkbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-list-picker-ojqrr)
 
-> **Note:** The icons svgs work, they just didn't seem to work inside codesanbox :)
+> **Note:** The icons svgs work, they just don't seem to work inside codesanbox :)
 
 ## How to install
 
