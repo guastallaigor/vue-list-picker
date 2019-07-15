@@ -83,6 +83,33 @@ describe('When I create the VueListPicker component', () => {
     console.error = consoleLog
   })
 
+  it('should validate all the other default props', () => {
+    const consoleLog = console.error
+    console.error = jest.fn()
+    const wrapper = createListPickerWrapper({ leftItems, rightItems })
+    const movedItemLocation = wrapper.vm.$options.props.movedItemLocation
+    expect(movedItemLocation.required).toBeFalsy()
+    expect(movedItemLocation.type).toBe(String)
+    expect(movedItemLocation.default).toBe('top')
+    const titleLeft = wrapper.vm.$options.props.titleLeft
+    expect(titleLeft.required).toBeFalsy()
+    expect(titleLeft.type).toBe(String)
+    expect(titleLeft.default).toBe('Items available')
+    const titleRight = wrapper.vm.$options.props.titleRight
+    expect(titleRight.required).toBeFalsy()
+    expect(titleRight.type).toBe(String)
+    expect(titleRight.default).toBe('Items selected')
+    const component = wrapper.find('.vue-list-picker')
+    expect(component.exists()).toBe(true)
+    const leftTitle = wrapper.find('.vue-list-picker>.list-picker-left>.list-picker-title')
+    expect(leftTitle.exists()).toBe(true)
+    expect(leftTitle.text()).toBe('Items available')
+    const rightTitle = wrapper.find('.vue-list-picker>.list-picker-right>.list-picker-title')
+    expect(rightTitle.exists()).toBe(true)
+    expect(rightTitle.text()).toBe('Items selected')
+    console.error = consoleLog
+  })
+
   it('should add html inside the slot moveAllRight', () => {
     const moveAllRight = '<p id="find-this-id">moveAllRight</p>'
     const propsData = { leftItems, rightItems }
@@ -184,6 +211,120 @@ describe('When I create the VueListPicker component', () => {
     expect(panels.at(1).attributes().style).toBe('min-height: 450px; min-width: 220px; width: 500px;')
   })
 
+  it('should add a custom-class to the items content', () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems, contentClass: 'custom-class' })
+    const items = wrapper.findAll('.list-picker-item')
+    for (let i = 0; i < items.length; i++) {
+      expect(items.at(i).exists()).toBe(true)
+      expect(items.at(i).classes().length).toBe(2)
+      expect(items.at(i).classes()).toContainEqual('custom-class')
+    }
+  })
+
+  it('should add text-center class to the items content', () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems, contentCentered: true })
+    const items = wrapper.findAll('.list-picker-item')
+    for (let i = 0; i < items.length; i++) {
+      expect(items.at(i).exists()).toBe(true)
+      expect(items.at(i).classes().length).toBe(2)
+      expect(items.at(i).classes()).toContainEqual('text-center')
+    }
+  })
+
+  it('should change the content attribute key', () => {
+    const anotherValue = {
+      id: 1,
+      content: 'Lorem ipsum dolor'
+    }
+    const anotherItems = [anotherValue]
+    const wrapper = createListPickerWrapper({ leftItems: anotherItems, rightItems: [], contentKey: 'id' })
+    const content = wrapper.find('.vue-list-picker>.list-picker-left>.list-picker-panel>.list-picker-item:nth-child(1)')
+    expect(content.exists()).toBe(true)
+    expect(content.text()).toBe('Lorem ipsum dolor')
+  })
+
+  it('should change the content attribute text', () => {
+    const anotherValue = {
+      key: 1,
+      test: 'Lorem ipsum dolor'
+    }
+    const anotherItems = [anotherValue]
+    const wrapper = createListPickerWrapper({ leftItems: anotherItems, rightItems: [], contentAttr: 'test' })
+    const content = wrapper.find('.vue-list-picker>.list-picker-left>.list-picker-panel>.list-picker-item:nth-child(1)')
+    expect(content.exists()).toBe(true)
+    expect(content.text()).toBe('Lorem ipsum dolor')
+  })
+
+  it('should wrap the content when it is above 50 characters', () => {
+    const anotherValue = {
+      key: 1,
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
+    }
+    const anotherItems = [anotherValue]
+    const wrapper = createListPickerWrapper({ leftItems: anotherItems, rightItems: [], contentSubstr: 50 })
+    const content = wrapper.find('.vue-list-picker>.list-picker-left>.list-picker-panel>.list-picker-item:nth-child(1)')
+    expect(content.exists()).toBe(true)
+    expect(content.text()).toBe('Lorem ipsum dolor sit amet, consectetur adipiscing...')
+  })
+
+  it('should wrap the title when it is above 50 characters', () => {
+    const wrapper = createListPickerWrapper({
+      leftItems,
+      rightItems,
+      titleLeft: 'Lorem ipsum dolor sit amet, consectetur adipiscing...',
+      titleSubstr: 50
+    })
+    const title = wrapper.find('.vue-list-picker>.list-picker-left>.list-picker-title')
+    expect(title.exists()).toBe(true)
+    expect(title.text()).toBe('Lorem ipsum dolor sit amet, consectetur adipiscing...')
+  })
+
+  it('should be able to select and unselect an item', () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems })
+    wrapper.setMethods({ selectUnselectItem: jest.fn(), setItem: jest.fn() })
+    const firstItem = wrapper.findAll('.vue-list-picker>.list-picker-left>.list-picker-panel>.list-picker-item')
+    firstItem.at(0).trigger('click')
+    expect(firstItem.exists()).toBe(true)
+    expect(wrapper.vm.selectUnselectItem).toHaveBeenCalledTimes(1)
+  })
+
+  it('should be able to select and unselect an item calling method directly', () => {
+    const left = leftItems.map(it => ({ ...it, isSelected: false }))
+    const wrapper = mount(VueListPicker, {
+      propsData: { leftItems: left, rightItems: [] },
+    })
+    wrapper.setMethods({ setItem: jest.fn() })
+    wrapper.vm.selectUnselectItem(left[0], left)
+    expect(wrapper.vm.setItem).toHaveBeenCalledTimes(1)
+  })
+
+  it('should be able to move all the left items to the right (mock)', () => {
+    const wrapper = createListPickerWrapper({ leftItems, rightItems: [] })
+    wrapper.setMethods({ moveAllRight: jest.fn() })
+    const firstButton = wrapper.find('.list-picker-actions>button:nth-child(1)')
+    firstButton.trigger('click')
+    expect(firstButton.exists()).toBe(true)
+    expect(wrapper.vm.moveAllRight).toHaveBeenCalledTimes(1)
+  })
+
+  it('should be able to move all the left items to the right calling the method directly', async () => {
+    const expected = leftItems.map(it => ({ ...it, isSelected: false })).sort((a,b) => b.key - a.key)
+    const wrapper = createListPickerWrapper({ leftItems, rightItems: [] })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.unselectedItems).toEqual(leftItems)
+    expect(wrapper.vm.selectedItems).toEqual([])
+    await wrapper.vm.$nextTick()
+    wrapper.vm.moveAllRight()
+    expect(wrapper.emitted()['move-all-right']).toBeTruthy()
+    expect(wrapper.emitted()['move-all-right'][0]).toEqual([expected])
+    // WIP
+    // expect(wrapper.vm.).toBe(rightItems)
+    // const firstButton = wrapper.find('.list-picker-actions>button:nth-child(1)')
+    // firstButton.trigger('click')
+    // expect(firstButton.exists()).toBe(true)
+    // expect(wrapper.vm.moveAllRight).toHaveBeenCalledTimes(1)
+  })
+
   // it('should emit a click event when clicked on any timeline card', () => {
   //   const wrapper = createListPickerWrapper({ items })
 
@@ -213,118 +354,6 @@ describe('When I create the VueListPicker component', () => {
   //   expect(wrapper.vm.setLineColor).toBe('background: black')
   // })
 
-  // it('should remove the lineColor', () => {
-  //   const wrapper = createListPickerWrapper({ items, lineColor: '' })
-
-  //   const lis = wrapper.findAll('.vue-list-picker>section.timeline>ol>li')
-  //   const li1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child')
-  //   const li2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)')
-  //   const li3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)')
-
-  //   // one more is created empty
-  //   expect(lis.length).toBe(4)
-  //   expect(li1.attributes().style).toBe(undefined)
-  //   expect(li2.attributes().style).toBe(undefined)
-  //   expect(li3.attributes().style).toBe(undefined)
-  //   expect(wrapper.props().lineColor).toBe('')
-  //   expect(wrapper.vm.setLineColor).toBe('')
-  // })
-
-  // it('should change the background color of the timeline to black when the prop timelineBackground is set to black', () => {
-  //   const wrapper = createListPickerWrapper({ items, timelineBackground: 'black' })
-
-  //   const timeline = wrapper.find('.vue-list-picker')
-
-  //   expect(timeline.exists()).toBe(true)
-  //   expect(timeline.attributes().style).toBe('background: black;')
-  // })
-
-  // it('should wrap the content when it has above 50 characters and the contentSubstr prop is set to 50', () => {
-  //   const wrapper = createListPickerWrapper({ items, contentSubstr: 50 })
-  //   const html = `<span class="content">
-  //           Lorem ipsum dolor sit amet, consectetur adipiscing...
-  //         </span>`
-
-  //   const content1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.content')
-  //   const content2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)>.time>span.content')
-  //   const content3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)>.time>span.content')
-
-  //   expect(content1.exists()).toBe(true)
-  //   expect(content2.exists()).toBe(true)
-  //   expect(content3.exists()).toBe(true)
-  //   expect(content1.html()).toBe(html)
-  //   expect(content2.html()).toBe(html)
-  //   expect(content3.html()).toBe(html)
-  // })
-
-  // it('should add a custom-class to the cards content when contentClass prop is set to custom-class', () => {
-  //   const wrapper = createListPickerWrapper({ items, contentClass: 'custom-class' })
-
-  //   const content1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.content')
-  //   const content2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)>.time>span.content')
-  //   const content3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)>.time>span.content')
-  //   const arr = [content1, content2, content3]
-
-  //   for (var i = 0; i < 3; i++) {
-  //     expect(arr[i].exists()).toBe(true)
-  //     expect(arr[i].classes().length).toBe(2)
-  //     expect(arr[i].classes()).toContainEqual('custom-class')
-  //   }
-  // })
-
-  // it('should add text-center class to all cards content when contentCentered prop is set to true', () => {
-  //   const wrapper = createListPickerWrapper({ items, contentCentered: true })
-
-  //   const content1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.content')
-  //   const content2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)>.time>span.content')
-  //   const content3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)>.time>span.content')
-  //   const arr = [content1, content2, content3]
-
-  //   for (var i = 0; i < 3; i++) {
-  //     expect(arr[i].exists()).toBe(true)
-  //     expect(arr[i].classes().length).toBe(2)
-  //     expect(arr[i].classes()).toContainEqual('text-center')
-  //   }
-  // })
-
-  // it('should change the content attribute key that is being used from content to test if contentAttr prop is set to test', () => {
-  //   const anotherValue = {
-  //     title: 'Title example 1',
-  //     test: 'Lorem ipsum dolor sit amet'
-  //   }
-  //   const anotherItems = [anotherValue]
-  //   const wrapper = createListPickerWrapper({ items: anotherItems, contentAttr: 'test' })
-  //   const content1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.content')
-  //   expect(content1.exists()).toBe(true)
-  //   expect(content1.html()).toBe(`<span class="content">
-  //           Lorem ipsum dolor sit amet
-  //         </span>`)
-  // })
-
-  // it('should wrap the title when it has above 50 characters and the titleSubstr prop is set to 50', () => {
-  //   const wrapper = createListPickerWrapper({ items, titleSubstr: 50 })
-  //   const html1 = `<span class="title">
-  //           Title example 1
-  //         </span>`
-  //   const html2 = `<span class="title">
-  //           Title example 2
-  //         </span>`
-  //   const html3 = `<span class="title">
-  //           Title example 3
-  //         </span>`
-
-  //   const title1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.title')
-  //   const title2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)>.time>span.title')
-  //   const title3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)>.time>span.title')
-
-  //   expect(title1.exists()).toBe(true)
-  //   expect(title2.exists()).toBe(true)
-  //   expect(title3.exists()).toBe(true)
-  //   expect(title1.html()).toBe(html1)
-  //   expect(title2.html()).toBe(html2)
-  //   expect(title3.html()).toBe(html3)
-  // })
-
   // it('should add a custom-class to the cards title when titleClass prop is set to custom-class', () => {
   //   const wrapper = createListPickerWrapper({ items, titleClass: 'custom-class' })
 
@@ -338,52 +367,6 @@ describe('When I create the VueListPicker component', () => {
   //     expect(arr[i].classes().length).toBe(2)
   //     expect(arr[i].classes()).toContainEqual('custom-class')
   //   }
-  // })
-
-  // it('should add text-center class to all cards title when titleCentered prop is set to true', () => {
-  //   const wrapper = createListPickerWrapper({ items, titleCentered: true })
-
-  //   const title1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.title')
-  //   const title2 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(2)>.time>span.title')
-  //   const title3 = wrapper.find('.vue-list-picker>section.timeline>ol>li:nth-child(3)>.time>span.title')
-  //   const arr = [title1, title2, title3]
-
-  //   for (var i = 0; i < 3; i++) {
-  //     expect(arr[i].exists()).toBe(true)
-  //     expect(arr[i].classes().length).toBe(2)
-  //     expect(arr[i].classes()).toContainEqual('text-center')
-  //   }
-  // })
-
-  // it('should change the title attribute key that is being used from title to test if titleAttr prop is set to test', () => {
-  //   const anotherValue = {
-  //     test: 'Title example 1',
-  //     content: 'Content'
-  //   }
-  //   const anotherItems = [anotherValue]
-  //   const wrapper = createListPickerWrapper({ items: anotherItems, titleAttr: 'test' })
-  //   const title1 = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time>span.title')
-  //   expect(title1.exists()).toBe(true)
-  //   expect(title1.html()).toBe(`<span class="title">
-  //           Title example 1
-  //         </span>`)
-  // })
-
-  // it('should have a two way data bind when itemSelected is passed and a card is clicked', () => {
-  //   const itemSelected = {
-  //     title: '',
-  //     content: ''
-  //   }
-  //   const wrapper = createListPickerWrapper({ items, itemSelected })
-  //   const time = wrapper.find('.vue-list-picker>section.timeline>ol>li:first-child>.time')
-  //   time.trigger('click')
-  //   const expected = {
-  //     title: 'Title example 1',
-  //     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ex dolor, malesuada luctus scelerisque ac, auctor vitae risus. Vivamus risus dolor, faucibus a bibendum quis, facilisis eget odio. Nullam non condimentum orci, a cursus magna. Suspendisse tempor rutrum eros, non pellentesque odio commodo eu. Donec at volutpat enim. Vivamus mattis volutpat urna, sit amet vulputate mauris sollicitudin et. Proin consequat at dolor in sodales. Vestibulum vel porta turpis. Pellentesque sollicitudin justo est, ut dapibus felis luctus mollis. Suspendisse feugiat, metus ut auctor dictum, nulla dui fringilla nisl, a pulvinar ipsum justo non lacus. Integer vestibulum sapien metus, et congue felis efficitur iaculis. Aliquam et mi quis nulla molestie elementum. Vestibulum in nibh nibh.'
-  //   }
-  //   expect(time.exists()).toBe(true)
-  //   expect(wrapper.emitted('click')).toBeTruthy()
-  //   expect(wrapper.emitted('click')).toMatchObject([[expected]])
   // })
 
   // it('should have a blue border when itemUniqueKey and itemSelected is passed and a card is clicked', (done) => {

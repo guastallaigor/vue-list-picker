@@ -47,7 +47,7 @@
         <div class="list-picker-item"
           v-for="item in selectedItems"
           :key="item[contentKey]"
-          :class="{'list-picker-selected': item.isSelected}"
+          :class="[getContentClasses, {'list-picker-selected': item.isSelected}]"
           @click="selectUnselectItem(item, selectedItems)"
           @mousemove="selectItem(item, selectedItems)"
           @mousedown="startDrag"
