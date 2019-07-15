@@ -343,7 +343,7 @@ describe('When I create the VueListPicker component', () => {
   it('should be able to select and unselect an item calling method directly', () => {
     const left = leftItems.map(it => ({ ...it, isSelected: false }))
     const wrapper = mount(VueListPicker, {
-      propsData: { leftItems: left, rightItems: [] },
+      propsData: { leftItems: left, rightItems: [] }
     })
     wrapper.setMethods({ setItem: jest.fn() })
     wrapper.vm.selectUnselectItem(left[0], left)
