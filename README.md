@@ -13,7 +13,9 @@
 
 ## Demo
 
-[![Edit Checkbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/o4o10xynoz)
+[![Edit Checkbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-list-picker-ojqrr)
+
+> **Note:** The icons svgs work, they just didn't seem to work inside codesanbox :)
 
 ## How to install
 
@@ -99,9 +101,13 @@ export default {
       key: 3,
       content: 'Item 3'
     }
-
-    const leftItems = [example1, example2, example3]
-    const rightItems = [example1, example2, example3]
+    const example4 = {
+      key: 4,
+      content: 'Item 4'
+    }
+    
+    const leftItems = [example1, example2]
+    const rightItems = [example3, example4]
 
     return { leftItems, rightItems }
   }
