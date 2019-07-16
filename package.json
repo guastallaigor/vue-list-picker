@@ -1,6 +1,6 @@
 {
   "name": "vue-list-picker",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "scripts": {
     "lint": "vue-cli-service lint",
@@ -17,8 +17,8 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.0.0",
-    "@commitlint/config-conventional": "^8.0.0",
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
     "@storybook/addon-actions": "^5.1.9",
     "@storybook/addon-backgrounds": "^5.1.9",
     "@storybook/addon-knobs": "^5.1.9",
