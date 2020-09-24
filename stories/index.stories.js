@@ -1,3 +1,6 @@
+// ! TODO
+// ! Fix array of objects controls
+
 import { action } from '@storybook/addon-actions'
 import VueListPicker from '../src/components/VueListPicker'
 
