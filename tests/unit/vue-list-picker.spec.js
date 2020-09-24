@@ -1,3 +1,6 @@
+// ! TODO
+// ! Remove setMethods and refactor tests that need it!
+
 import { mount } from '@vue/test-utils'
 import VueListPicker from '../../src/components/VueListPicker'
 
@@ -41,11 +44,6 @@ describe('When I create the VueListPicker component', () => {
     Object.assign(event, props)
     return event
   }
-
-  it('should be a Vue instance', () => {
-    const wrapper = createListPickerWrapper({ leftItems, rightItems })
-    expect(wrapper.find(VueListPicker).isVueInstance()).toBe(true)
-  })
 
   it('should add a text-center class inside the title', () => {
     const wrapper = createListPickerWrapper({ leftItems, rightItems, titleCentered: true })
@@ -332,6 +330,7 @@ describe('When I create the VueListPicker component', () => {
   })
 
   it('should be able to select and unselect an item', () => {
+    console.error = () => {}
     const wrapper = createListPickerWrapper({ leftItems, rightItems })
     wrapper.setMethods({ selectUnselectItem: jest.fn(), setItem: jest.fn() })
     const firstItem = wrapper.findAll('.vue-list-picker>.list-picker-left>.list-picker-panel>.list-picker-item')
@@ -341,6 +340,7 @@ describe('When I create the VueListPicker component', () => {
   })
 
   it('should be able to select and unselect an item calling method directly', () => {
+    console.error = () => {}
     const left = leftItems.map(it => ({ ...it, isSelected: false }))
     const wrapper = mount(VueListPicker, {
       propsData: { leftItems: left, rightItems: [] }
@@ -351,6 +351,7 @@ describe('When I create the VueListPicker component', () => {
   })
 
   it('should be able to move all the left items to the right (mock)', () => {
+    console.error = () => {}
     const wrapper = createListPickerWrapper({ leftItems, rightItems: [] })
     wrapper.setMethods({ moveAllRight: jest.fn() })
     const firstButton = wrapper.find('.list-picker-actions>button:nth-child(1)')
@@ -418,6 +419,7 @@ describe('When I create the VueListPicker component', () => {
     const firstItem = wrapper.find(firstItemSelector)
     firstItem.trigger('click')
     expect(firstItem.exists()).toBe(true)
+    await wrapper.vm.$nextTick()
     expect(firstItem.classes()).toContainEqual('list-picker-selected')
     expect(wrapper.vm.unselectedItems[0].isSelected).toBeTruthy()
     wrapper.vm.moveRight()
@@ -438,6 +440,7 @@ describe('When I create the VueListPicker component', () => {
     const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
     const firstItem = wrapper.find(firstItemSelector)
     firstItem.trigger('click')
+    await wrapper.vm.$nextTick()
     expect(firstItem.exists()).toBe(true)
     expect(firstItem.classes()).toContainEqual('list-picker-selected')
     expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
@@ -460,6 +463,7 @@ describe('When I create the VueListPicker component', () => {
     const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
     const firstItem = wrapper.find(firstItemSelector)
     firstItem.trigger('click')
+    await wrapper.vm.$nextTick()
     expect(firstItem.exists()).toBe(true)
     expect(firstItem.classes()).toContainEqual('list-picker-selected')
     expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
@@ -481,6 +485,7 @@ describe('When I create the VueListPicker component', () => {
     const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
     const firstItem = wrapper.find(firstItemSelector)
     firstItem.trigger('click')
+    await wrapper.vm.$nextTick()
     expect(firstItem.exists()).toBe(true)
     expect(firstItem.classes()).toContainEqual('list-picker-selected')
     expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
@@ -501,6 +506,7 @@ describe('When I create the VueListPicker component', () => {
     const firstItemSelector = '.vue-list-picker>.list-picker-right>.list-picker-panel>.list-picker-item:nth-child(1)'
     const firstItem = wrapper.find(firstItemSelector)
     firstItem.trigger('click')
+    await wrapper.vm.$nextTick()
     expect(firstItem.exists()).toBe(true)
     expect(firstItem.classes()).toContainEqual('list-picker-selected')
     expect(wrapper.vm.selectedItems[0].isSelected).toBeTruthy()
