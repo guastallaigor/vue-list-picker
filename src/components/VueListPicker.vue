@@ -277,7 +277,7 @@ export default {
     },
     moveAll (firstArray, secondArray) {
       for (let i = firstArray.length - 1; i >= 0; i--) {
-        let item = firstArray[i]
+        const item = firstArray[i]
         firstArray.splice(i, 1)
         secondArray.push(item)
       }
