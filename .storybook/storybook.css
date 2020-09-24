@@ -1,5 +1,6 @@
-<style>
-html, body, #root {
+html,
+body,
+#root {
   align-items: center;
   background-color: transparent !important;
   display: flex;
@@ -15,4 +16,3 @@ html, body, #root {
 .custom-class {
   color: red;
 }
-</style>
