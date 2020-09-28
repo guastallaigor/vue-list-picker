@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-    <a href="https://circleci.com/gh/guastallaigor/vue-list-picker"><img src="https://badgen.net/circleci/github/guastallaigor/vue-list-picker/master" alt="Build"></a>
+    <a href="https://circleci.com/gh/guastallaigor/vue-list-picker"><img alt="CircleCI" src="https://img.shields.io/circleci/build/github/guastallaigor/vue-list-picker/master?label=circleci&logo=circleci" alt="Build"></a>
     <a href="https://codecov.io/gh/guastallaigor/vue-list-picker"><img src="https://codecov.io/gh/guastallaigor/vue-list-picker/branch/master/graph/badge.svg" alt="Code Coverage"></a>
     <a href="https://www.npmjs.com/package/vue-list-picker"><img src="https://img.shields.io/npm/dt/vue-list-picker.svg" alt="Total Downloads"></a>
     <a href="https://github.com/guastallaigor/vue-list-picker/releases"><img src="https://img.shields.io/npm/v/vue-list-picker.svg" alt="Latest Release"></a>
