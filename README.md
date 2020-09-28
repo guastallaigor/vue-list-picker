@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-    <a href="https://circleci.com/gh/guastallaigor/vue-list-picker/tree/master"><img src="https://badgen.net/circleci/github/guastallaigor/vue-list-picker/master" alt="Build"></a>
+    <a href="https://circleci.com/gh/guastallaigor/vue-list-picker"><img src="https://badgen.net/circleci/github/guastallaigor/vue-list-picker/master" alt="Build"></a>
     <a href="https://codecov.io/gh/guastallaigor/vue-list-picker"><img src="https://codecov.io/gh/guastallaigor/vue-list-picker/branch/master/graph/badge.svg" alt="Code Coverage"></a>
     <a href="https://www.npmjs.com/package/vue-list-picker"><img src="https://img.shields.io/npm/dt/vue-list-picker.svg" alt="Total Downloads"></a>
     <a href="https://github.com/guastallaigor/vue-list-picker/releases"><img src="https://img.shields.io/npm/v/vue-list-picker.svg" alt="Latest Release"></a>
@@ -30,27 +30,28 @@ $ yarn add vue-list-picker
 ```
 
 ## Quick start
+
 ### Vue.js
 
 You can import in your `main.js` file
 
 ```js
-import Vue from 'vue'
-import VueListPicker from 'vue-list-picker'
+import Vue from "vue";
+import VueListPicker from "vue-list-picker";
 
-Vue.use(VueListPicker)
+Vue.use(VueListPicker);
 ```
 
 Or locally in any component
 
 ```js
-import { VueListPicker } from 'vue-list-picker'
+import { VueListPicker } from "vue-list-picker";
 
 export default {
   components: {
-    VueListPicker
-  }
-}
+    VueListPicker,
+  },
+};
 ```
 
 ### Nuxt.js
@@ -58,18 +59,18 @@ export default {
 You can import as a Nuxt.js plugin
 
 `~/plugins/vue-list-picker.js`
-```js
-import Vue from 'vue'
-import VueListPicker from 'vue-list-picker'
 
-Vue.use(VueListPicker)
+```js
+import Vue from "vue";
+import VueListPicker from "vue-list-picker";
+
+Vue.use(VueListPicker);
 ```
 
 and then import it in your `nuxt.config.js` file
+
 ```js
-plugins: [
-    '~/plugins/vue-list-picker.js'
-]
+plugins: ["~/plugins/vue-list-picker.js"];
 ```
 
 There's a window mouseup event listener so you should use the `<no-ssr>` tag
@@ -78,45 +79,42 @@ There's a window mouseup event listener so you should use the `<no-ssr>` tag
 
 ```html
 <template>
-  <vue-list-picker 
-    :left-items="leftItems"
-    :right-items="rightItems"
-    />
+  <vue-list-picker :left-items="leftItems" :right-items="rightItems" />
 </template>
 
 <script>
-export default {  
-  data() {
-    const example1 = {
-      key: 1,
-      content: 'Item 1'
-    }
-    const example2 = {
-      key: 2,
-      content: 'Item 2'
-    }
-    const example3 = {
-      key: 3,
-      content: 'Item 3'
-    }
-    const example4 = {
-      key: 4,
-      content: 'Item 4'
-    }
-    
-    const leftItems = [example1, example2]
-    const rightItems = [example3, example4]
+  export default {
+    data() {
+      const example1 = {
+        key: 1,
+        content: "Item 1",
+      };
+      const example2 = {
+        key: 2,
+        content: "Item 2",
+      };
+      const example3 = {
+        key: 3,
+        content: "Item 3",
+      };
+      const example4 = {
+        key: 4,
+        content: "Item 4",
+      };
 
-    return { leftItems, rightItems }
-  }
-}
+      const leftItems = [example1, example2];
+      const rightItems = [example3, example4];
+
+      return { leftItems, rightItems };
+    },
+  };
 </script>
 ```
 
 ## Props
 
 | Property name       | Type    | Default           | Description                                                                                     |
-|---------------------|---------|-------------------|-------------------------------------------------------------------------------------------------|
+| ------------------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------- |
 | left-items          | Array   | null              | Array of objects to be displayed in the left. Must have at least a key and content property     |
 | right-items         | Array   | null              | Array of objects to be displayed in the right. Must have at least a key and content property    |
 | moved-item-location | String  | 'top'             | After move a item, if this is set to top will move the item to the top, otherwise to the bottom |
@@ -139,7 +137,7 @@ export default {
 ## Events (optional usage)
 
 | Event name     | Return type | Description          |
-|----------------|-------------|----------------------|
+| -------------- | ----------- | -------------------- |
 | move-all-right | Array       | Array of items moved |
 | move-right     | Object      | Item object moved    |
 | move-left      | Object      | Item object moved    |
@@ -149,7 +147,7 @@ export default {
 ## Slots (optional usage)
 
 | Slot name    | Description                                                                 |
-|--------------|-----------------------------------------------------------------------------|
+| ------------ | --------------------------------------------------------------------------- |
 | moveAllRight | Use this to change the icon (chevrons-right) inside the first action button |
 | moveRight    | Use this to change the icon (chevron-right) inside the second action button |
 | moveLeft     | Use this to change the icon (chevron-left) inside the third action button   |
@@ -189,12 +187,15 @@ yarn
 ```
 
 ### Storybook
+
 For visual testing, this project contains storybook which you can run by doing the next command
+
 ```sh
 $ yarn storybook
 ```
 
 ### Jest
+
 Before making the PR, if you changed something that needs to be tested, please make the tests inside the `tests/unit` folder.
 
 To run the tests, you can use the next command
@@ -204,6 +205,7 @@ $ yarn test:unit
 ```
 
 ### Commitlint
+
 This project follows the [commitlint](https://github.com/conventional-changelog/commitlint) guidelines, with minor changes.
 
 You can commit using `npm run commit` to help you with that.
