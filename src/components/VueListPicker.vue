@@ -19,23 +19,23 @@
     </div>
     <div class="list-picker-actions">
       <button @click="moveAllRight" :class="buttonClass">
-        <img v-if="!this.$slots.moveAllRight" src="../assets/chevrons-right.svg" alt="Chevrons right">
+        <img v-if="!$slots.moveAllRight" src="../assets/chevrons-right.svg" alt="Chevrons right">
         <slot name="moveAllRight"/>
       </button>
       <button @click="moveRight" class="mb-25" :class="buttonClass">
-        <img v-if="!this.$slots.moveRight" src="../assets/chevron-right.svg" alt="Chevron right">
+        <img v-if="!$slots.moveRight" src="../assets/chevron-right.svg" alt="Chevron right">
         <slot name="moveRight"/>
       </button>
       <button @click="moveLeft" :class="buttonClass">
-        <img v-if="!this.$slots.moveLeft" src="../assets/chevron-left.svg" alt="Chevron left">
+        <img v-if="!$slots.moveLeft" src="../assets/chevron-left.svg" alt="Chevron left">
         <slot name="moveLeft"/>
       </button>
       <button @click="moveAllLeft" class="mb-25" :class="buttonClass">
-        <img v-if="!this.$slots.moveAllLeft" src="../assets/chevrons-left.svg" alt="Chevrons left">
+        <img v-if="!$slots.moveAllLeft" src="../assets/chevrons-left.svg" alt="Chevrons left">
         <slot name="moveAllLeft"/>
       </button>
       <button @click="unselectAll" :class="buttonClass">
-        <img v-if="!this.$slots.unselectAll" src="../assets/x.svg" alt="X icon">
+        <img v-if="!$slots.unselectAll" src="../assets/x.svg" alt="X icon">
         <slot name="unselectAll"/>
       </button>
     </div>
