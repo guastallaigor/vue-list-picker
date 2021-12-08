@@ -46,12 +46,28 @@ Or locally in any component
 
 ```js
 import { VueListPicker } from "vue-list-picker";
+// In v0.3+ you don't need the brackets above
 
 export default {
   components: {
     VueListPicker,
   },
 };
+```
+
+For Vue 3
+
+```js
+import { createApp, h } from "vue";
+import VueListPicker from "vue-list-picker";
+
+const app = createApp({
+  render: () => h(App),
+});
+
+app.use(VueListPicker);
+
+app.mount("#app");
 ```
 
 ### Nuxt.js
@@ -70,10 +86,8 @@ Vue.use(VueListPicker);
 and then import it in your `nuxt.config.js` file
 
 ```js
-plugins: ["~/plugins/vue-list-picker.js"];
+plugins: [{ src: "~/plugins/vue-list-picker.js", mode: "client" }];
 ```
-
-There's a window mouseup event listener so you should use the `<no-ssr>` tag
 
 ## Basic usage
 
