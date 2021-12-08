@@ -1,6 +1,9 @@
 {
   "name": "vue-list-picker",
-  "version": "0.2.0",
+  "version": "0.3.0",
+  "description": "Just a simple list picker component made with Vue.js",
+  "homepage": "https://github.com/guastallaigor/vue-list-picker#readme",
+  "author": "Igor Guastalla de Lima <limaguastallaigor@gmail.com>",
   "private": false,
   "scripts": {
     "lint": "vue-cli-service lint",
@@ -14,41 +17,41 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "vue": "^2.6.12"
+    "vue": "^2.6.14"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "@storybook/addon-actions": "^6.0.21",
-    "@storybook/addon-backgrounds": "^6.0.21",
-    "@storybook/addon-controls": "^6.0.21",
-    "@storybook/addon-essentials": "^6.0.21",
-    "@storybook/addon-knobs": "^6.0.21",
-    "@storybook/addon-links": "^6.0.21",
-    "@storybook/vue": "^6.0.21",
-    "@vue/cli-plugin-babel": "^4.5.6",
-    "@vue/cli-plugin-eslint": "^4.5.6",
-    "@vue/cli-plugin-unit-jest": "^4.5.6",
-    "@vue/cli-service": "^4.5.6",
-    "@vue/eslint-config-standard": "^5.1.2",
-    "@vue/test-utils": "^1.1.0",
-    "babel-core": "7.0.0-bridge.0",
+    "@babel/core": "^7.16.0",
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
+    "@storybook/addon-a11y": "^6.4.8",
+    "@storybook/addon-actions": "^6.4.8",
+    "@storybook/addon-backgrounds": "^6.4.8",
+    "@storybook/addon-controls": "^6.4.8",
+    "@storybook/addon-essentials": "^6.4.8",
+    "@storybook/addon-links": "^6.4.8",
+    "@storybook/theming": "^6.4.8",
+    "@storybook/vue": "^6.4.8",
+    "@vue/cli-plugin-babel": "^4.5.15",
+    "@vue/cli-plugin-eslint": "^4.5.15",
+    "@vue/cli-plugin-unit-jest": "^4.5.15",
+    "@vue/cli-service": "^4.5.15",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/test-utils": "^1.3.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^23.6.0",
-    "babel-loader": "^8.1.0",
+    "babel-jest": "^27.4.2",
+    "babel-loader": "^8.2.3",
     "babel-preset-vue": "^2.0.2",
-    "commitizen": "^4.2.1",
-    "core-js": "^3.6.5",
-    "eslint": "^7.9.0",
-    "eslint-plugin-import": "^2.22.0",
+    "commitizen": "^4.2.4",
+    "core-js": "^3.19.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-vue": "^6.2.2",
-    "husky": "^4.3.0",
-    "react-is": "^16.13.1",
-    "vue-cli-plugin-storybook": "^1.3.0",
-    "vue-template-compiler": "^2.6.12"
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-standard": "^4.1.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "husky": "^7.0.4",
+    "vue-cli-plugin-storybook": "^2.1.0",
+    "vue-template-compiler": "^2.6.14"
   },
   "bugs": {
     "url": "https://github.com/guastallaigor/vue-list-picker/issues"
@@ -113,7 +116,7 @@
     "plugins": {
       "autoprefixer": {}
     }
-  },
+  },  
   "browserslist": [
     "> 1%",
     "last 2 versions"

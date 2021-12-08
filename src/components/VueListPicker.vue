@@ -2,7 +2,7 @@
   <div class="vue-list-picker">
     <div class="list-picker-container list-picker-left">
       <div class="list-picker-title" :class="getTitleClasses">
-        {{ titleLeft | textSubstr(titleSubstr) }}
+        {{ textSubstr(titleLeft, titleSubstr) }}
       </div>
       <div class="list-picker-panel" ref="moverleft" :style="getStyles">
         <div class="list-picker-item"
@@ -13,7 +13,7 @@
           @mousemove="selectItem(item, selectedItems)"
           @mousedown="startDrag"
           >
-          {{ item[contentAttr] | textSubstr(contentSubstr) }}
+          {{ textSubstr(item[contentAttr], contentSubstr) }}
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
     </div>
     <div class="list-picker-container list-picker-right">
       <div class="list-picker-title" :class="getTitleClasses">
-        {{ titleRight | textSubstr(titleSubstr) }}
+        {{ textSubstr(titleRight, titleSubstr) }}
       </div>
       <div class="list-picker-panel" ref="moverright" :style="getStyles">
         <div class="list-picker-item"
@@ -52,7 +52,7 @@
           @mousemove="selectItem(item, selectedItems)"
           @mousedown="startDrag"
           >
-          {{ item[contentAttr] | textSubstr(contentSubstr) }}
+          {{ textSubstr(item[contentAttr], contentSubstr) }}
         </div>
       </div>
     </div>
@@ -141,11 +141,6 @@ export default {
     dragging: false,
     lastMovedItem: null
   }),
-  filters: {
-    textSubstr (value, qtd = 250, mask = '...') {
-      return value && value.length > qtd ? `${value.substring(0, qtd)}${mask}` : value
-    }
-  },
   computed: {
     unselectedItems: {
       get () {
@@ -199,6 +194,9 @@ export default {
     document.removeEventListener('mouseup', this.stopDrag)
   },
   methods: {
+    textSubstr (value, qtd = 250, mask = '...') {
+      return value && value.length > qtd ? `${value.substring(0, qtd)}${mask}` : value
+    },
     startDrag () {
       this.dragging = true
     },

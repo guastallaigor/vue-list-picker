@@ -8,6 +8,16 @@ export default {
   title: 'VueListPicker',
   component: VueListPicker,
   parameters: {
+    a11y: {
+      // optional selector which element to inspect
+      element: '#root',
+      // axe-core configurationOptions (https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#parameters-1)
+      config: {},
+      // axe-core optionsParameter (https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#options-parameter)
+      options: {},
+      // optional flag to prevent the automatic check
+      manual: true
+    },
     controls: {
       hideNoControlsWarning: true,
       expanded: true
@@ -36,7 +46,7 @@ export default {
     movedItemLocation: {
       control: {
         type: 'inline-radio',
-        options: ['top', 'bottom'],
+        options: ['top', 'bottom']
       }
     },
     titleLeft: {
@@ -113,7 +123,7 @@ const actionsData = {
   moveAllLeft: action('move-all-left'),
   moveAllRight: action('move-all-right'),
   unselectAll: action('unselect-all')
-};
+}
 
 export const Default = () => ({
   components: { VueListPicker },
