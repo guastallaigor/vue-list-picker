@@ -1,6 +1,6 @@
 <p align="center">
   <img width="200px" src="./.github/logo.png"><br>
-  Just a simple list picker component made with Vue.js.
+  Just a simple list picker component made with Vue.js (works with Vue 2 & 3).
 </p>
 
 <p align="center">
